@@ -1,36 +1,31 @@
-name: deploy-book
+# .github/workflows/deploy.yml
+name: Deploy Jupyter Book to GitHub Pages
 
 on:
   push:
-    branches: [main]
-
-permissions:
-  contents: write  # 🟢 必須要這行，否則 GitHub Token 沒有寫入權限
+    branches:
+      - main  # 或你想觸發部署的分支
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          pip install -U jupyter-book ghp-import
+    - name: Install dependencies
+      run: |
+        pip install -U jupyter-book ghp-import
 
-      - name: Build Jupyter Book
-        run: |
-          jupyter-book build .
+    - name: Build the book
+      run: |
+        jupyter-book build .
 
-      - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          ghp-import -n -f _build/html -b gh-pages
-          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" gh-pages --force
+    - name: Deploy to GitHub Pages
+      run: |
+        ghp-import -n -p -f _build/html
