@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Voronoi Diagram 報告 &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'voronoi_report';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Notebooks with MyST Markdown" href="markdown-notebooks.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="My sample book - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Content with notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Voronoi Diagram 報告</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fvoronoi_report.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/voronoi_report.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Voronoi Diagram 報告</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">軟體規格書</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">軟體說明</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">程式設計</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">軟體測試與實驗結果</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">結論與心得</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">附錄</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">相關檔案</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">相關連結</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="voronoi-diagram">
+<h1>Voronoi Diagram 報告<a class="headerlink" href="#voronoi-diagram" title="Link to this heading">#</a></h1>
+<section id="id1">
+<h2>軟體規格書<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ul>
+<li><h3 class="rubric" id="id2">輸出與輸入（資料）規格</h3>
+</li>
+</ul>
+<p><strong>輸入：</strong>
++ 畫布上任意點擊，畫布大小為 602 x 602
++ 輸入檔.txt，包含多筆測資與註解，<a class="reference external" href="https://wendy062644.github.io/other/vd_testdata.in">輸入檔案範例</a>
++ 輸出檔.txt，直接在畫布中繪製線與點，格式如下方輸出檔案範例<strong>輸出：</strong>
+輸出檔案格式如下：</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>+ 點：`P X Y` // 每個點佔一行，兩整數 x, y 為座標
++ 線段：`E X1 Y1 X2 Y2` // (X1, Y1) 為起點，(X2, Y2) 為終點，其中 `X1≦Y2` 或
+ `X1=X2, Y1≦Y2`
++ 點座標在前半段，線段在後半段，且以座標用字典序(lexical order)排序**輸出文字檔案範例：**
+
+
+
+```
+
+P 100 100
+P 100 200
+P 200 100
+P 200 200
+E 0 150 150 150
+E 150 0 150 150
+E 150 150 150 600
+E 150 150 600 150
+```
+</pre></div>
+</div>
+<ul>
+<li><h3 class="rubric" id="id3">功能規格與介面規格</h3>
+</li>
+</ul>
+<p><strong>操作介面：</strong></p>
+<p><img alt="測試結果圖片1" src="_images/1.png" />
+圖1 初始狀況</p>
+<p><img alt="測試結果圖片2" src="_images/2.png" />
+圖2 計算結果</p>
+<p><strong>按鈕功能</strong>
++ Clear Canvas：清除畫布上所有點與線段
++ Load Points from File：讀取輸入文字檔
++ Execute Current Points：計算當下畫布上的點
++ Load Output：讀取輸出文字檔
++ Prev Test Case：顯示上一筆測資  Next Test Case：顯示下一筆測資
++ Save Output：輸出「輸出文字檔」
++ Prev Step：合併步驟中的上一步  Next Step：合併步驟中的下一步</p>
+<ul>
+<li><h3 class="rubric" id="id4">軟體測試規劃書</h3>
+</li>
+</ul>
+<p>1 點：不做任何動作</p>
+<p>2 點：找兩點的垂直平分線</p>
+<p>3 點：找三點的外心，並以外心為為起點，往外畫出三條垂直平分線</p>
+<p>4～6 點：Divide 及 Merge 一次</p>
+<p>7～9 點：Divide 及 Merge 兩次</p>
+<p>大於 9 點：Divide 及 Merge 三次 以上</p>
+</section>
+<section id="id5">
+<h2>軟體說明<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<ul>
+<li><h3 class="rubric" id="id6">軟體安裝</h3>
+<ul class="simple">
+<li><ol class="arabic simple">
+<li><p>下載程式壓縮檔</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="2">
+<li><p>解壓縮後，點擊「dist」資料夾 後再點擊「index」資料夾</p></li>
+</ol>
+</li>
+<li><ol class="arabic simple" start="3">
+<li><p>點擊「index.exe」執行檔
+注意：勿移動/修改/刪除其他附加文件或檔案</p></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><h3 class="rubric" id="id7">使用說明</h3>
+</li>
+</ul>
+<p><strong>滑鼠點擊畫布</strong></p>
+<p><img alt="測試結果圖片1" src="_images/3.png" />
+圖3 點擊畫布</p>
+<p><img alt="測試結果圖片2" src="_images/4.png" />
+圖4 計算Voronoi Diagram</p>
+<p><strong>讀取 點座標檔案</strong></p>
+<p><img alt="測試結果圖片1" src="_images/5.png" />
+圖5 讀取點座標</p>
+<p><img alt="測試結果圖片2" src="_images/6.png" />
+圖6 自動計算Voronoi Diagram</p>
+<p><strong>讀取 輸出文字檔</strong></p>
+<p><img alt="測試結果圖片1" src="_images/7.png" />
+圖7 讀取輸出檔</p>
+<p><img alt="測試結果圖片2" src="_images/8.png" />
+圖8 繪製點與線</p>
+<p><strong>多筆測資</strong></p>
+<p><img alt="測試結果圖片1" src="_images/9.png" />
+圖9 第 12/20 筆測資</p>
+<p><img alt="測試結果圖片2" src="_images/10.png" />
+圖10 第 13/20 筆測資</p>
+<p><strong>Step by Step</strong></p>
+<p><img alt="測試結果圖片1" src="_images/11.png" />
+圖11 第一步(merge前)</p>
+<p><img alt="測試結果圖片2" src="_images/12.png" />
+圖12 第二步(merge後)</p>
+</section>
+<section id="id8">
+<h2>程式設計<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<ul>
+<li><h3 class="rubric" id="id9">資料結構</h3>
+<p><strong>Point</strong>+ `double x, y; //紀錄點座標</p>
+<p>bool operator==(const Point&amp; other) // overload 等於判斷</p>
+<p>Point&amp; operator=(const Point&amp; other) // overload 指派</p>
+<p>bool operator&lt;(const Point&amp; other) // overload 小於判斷</p>
+<p>bool operator!=(const Point&amp; other) // overload 不等於判斷<code class="docutils literal notranslate">&#160; <span class="pre">**Edge**+</span></code>Point Start; // 線起點座標</p>
+<p>Point End; // 線終點座標</p>
+<p>Point A; // 做中垂線的點 A 座標</p>
+<p>Point B; // 做中垂線的點 B 座標<code class="docutils literal notranslate">&#160; <span class="pre">**Point</span> <span class="pre">/</span> <span class="pre">Edge</span> <span class="pre">vector**+</span></code>vector<Edge> mid_edge; // 紀錄HyperPlane的Edge</p>
+<p>vector<Edge> RightEdge; // 紀錄右邊的Edge</p>
+<p>vector<Edge> LeftEdge; // 紀錄左邊的Edge</p>
+<p>vector<Edge> voronoi; // 紀錄合併後的Edge</p>
+<p>vector<Point> RightConvexhull; // 紀錄右邊的凸包</p>
+<p>vector<Point> LeftConvexhull; // 紀錄左邊的凸包`* ### 三個點以下</p>
+<p><strong>兩點</strong>+
+先找出兩點的中點，再找出中垂線
+<strong>三點</strong>+ 找出三點的外心，再以外心為起點，往外畫出三條垂直平分線</p>
+<p>直角、銳角、鈍角的外心位置不同，因此在畫線時需分開處理</p>
+<p><img alt="測試結果圖片1" src="_images/13.png" />
+圖13 兩點的垂直平分線</p>
+<p><img alt="測試結果圖片2" src="_images/14.png" />
+圖14 三點的垂直平分線</p>
+</li>
+<li><h3 class="rubric" id="id10">超過三個點</h3>
+<p><strong>流程</strong>
+Sort：將點依照 x 座標排序，若 x 座標相同則依照 y 座標排序</p>
+<p>Divide：將點分成左右兩邊，再遞迴處理左右兩邊的點</p>
+<p>如果： 點數量 &lt;= 3，則直接回傳垂直平分線</p>
+<p>否則： Merge(將左右兩邊的結果合併)</p>
+<p><strong>虛擬碼</strong></p>
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>voronoi() {
+if(點數量 == 1)
+return;
+else if(點數量 == 2)
+return 兩點的垂直平分線;
+else if(點數量 == 3)
+return 三點的垂直平分線;
+else {
+L_Point = voronoi(L, M); // 左邊的點
+R_Point = voronoi(M, R); // 右邊的點
+return Merge(L_Point, R_Point);
+}
+}</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>**合併(Merge)**  
+
+找出左右兩邊構成的上切線，以此出發
+
+
+途中撞到左右 Voronoi diagram ，就改變行進方向
+
+
+清除多餘的 Voronoi diagram
+
++ Edge的起終點皆在Hyperplane的同一側(如：右側Edge的起終點皆在Hyperplane右側)，則不動作
+
+
+Edge的起終點皆在Hyperplane的另一側(如：右側Edge的起終點其一在Hyperplane的左側)，則刪除
+
+
+Edge的起終點在Hyperplane的兩側，則將另一側的點更改為相交位置
+
+
+
+
+![測試結果圖片1](image/15.png)
+圖15 合併之前
+
+
+
+
+
+
+![測試結果圖片2](image/16.png)
+圖16 合併過程* ### Convex Hull
+
+
+**透過 Voronoi diagram 尋找****(PPT. 4-37)**
+After a Voronoi diagram is constructed, a convex hull can by found in O(n) time.
+
+
+若該 Edge 往外無限延伸，則組成該 Edge 的A、B點為 Convex Hull 的點
+
+
+
+
+![測試結果圖片1](image/17.png)
+圖17 綠色 Edge 的A、B點為Convex Hull的點
+
+
+
+
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id11">
+<h2>軟體測試與實驗結果<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<ul>
+<li><h3 class="rubric" id="id12">執行環境</h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>  - 作業系統：Windows 11 專業版 22H2
+  - 編譯器：g++ 14.2.0 / Python 3.12.2
+  - 硬體配置：R7 3700x / DDR4 3600MHz 8G*4 / RX6800XT
+</pre></div>
+</div>
+<p><img alt="測試結果圖片1" src="_images/18.png" />
+圖18 執行環境</p>
+</li>
+<li><h3 class="rubric" id="id13">實驗結果</h3>
+<p><strong>合併過程</strong></p>
+<p><img alt="測試結果圖片1" src="_images/21.png" />
+圖19 2點與2點合併</p>
+<p><img alt="測試結果圖片2" src="_images/22.png" />
+圖20 2點與3點合併</p>
+<p><img alt="測試結果圖片1" src="_images/23.png" />
+圖21 4點與5點合併</p>
+<p><img alt="測試結果圖片2" src="_images/24.png" />
+圖22 合併結果</p>
+<p><strong>3 點以下</strong></p>
+<p><img alt="測試結果圖片1" src="_images/25.png" />
+圖23 直角三角形</p>
+<p><img alt="測試結果圖片2" src="_images/26.png" />
+圖24 三點平行</p>
+<p><strong>4 ~ 6 點</strong></p>
+<p><img alt="測試結果圖片1" src="_images/27.png" />
+圖25 正方形 (水平+垂直)</p>
+<p><img alt="測試結果圖片2" src="_images/28.png" />
+圖26 3點水平、2點垂直</p>
+<p><strong>7 ~ 9 點</strong></p>
+<p><img alt="測試結果圖片1" src="_images/29.png" />
+圖27 隨機 7 點</p>
+<p><img alt="測試結果圖片2" src="_images/30.png" />
+圖28 隨機 8 點</p>
+<p><strong>10 點以上</strong></p>
+<p><img alt="測試結果圖片1" src="_images/31.png" />
+圖29 隨機 12 點</p>
+<p><img alt="測試結果圖片2" src="_images/32.png" />
+圖30 隨機 15 點</p>
+</li>
+</ul>
+</section>
+<section id="id14">
+<h2>結論與心得<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<ul>
+<li><h3 class="rubric" id="id15">初測</h3>
+<p>初測的內容較簡單，只有 1~3 個點，因此只需要直接計算就好。</p>
+<p>較複雜的部份為三點時的處理，除了要找外心，還要判斷直角、銳角、鈍角的情況。</p>
+<p>而在此階段還未使用到 Divide-and-Conquer，因此很容易忽略資料結構與演算法的設計，導致後續撰寫困難。</p>
+<p>為了使 C++ 和 Python 打包成一個檔案，也讓我吃了不少苦頭。### 後測</p>
+<p>如果程式只需要divide和merge一次，則狀況較單純，找到上切線後一直往下找即可</p>
+<p>需注意的部分為左右的Edge與Hyperplane相交的位置相同。</p>
+<p>當點數量超過6個時，狀況就變得極為複雜，有許多特例需要判斷和處理</p>
+<p>只要有一步做錯，就會產生蝴蝶效應，而使其後續越錯越多。</p>
+<p>因初測時未考慮後續的規劃，經常寫到一半才發現缺少某些資料或資料結構設計不佳，為此也付出了慘痛的代價(重寫4、5次)。### 結論 / 心得</p>
+<p>在寫程式之前，需要詳細規劃每一個步驟，避免後續的困難。</p>
+<p>發現程式碼有缺漏或方向不對時，有些時候砍掉重寫會比Debug或彌補過錯來的快。</p>
+<p>當merge的過程出現錯誤時，很難馬上找到問題點，必須要逐行註解慢慢排除，這個過程也是十分煎熬。</p>
+</li>
+</ul>
+</section>
+<section id="id16">
+<h2>附錄<a class="headerlink" href="#id16" title="Link to this heading">#</a></h2>
+<section id="id17">
+<h3>相關檔案<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference download internal" download="" href="_downloads/418d4d83c9ac003186bb089b09b96087/voronoi.cpp"><span class="xref download myst">C++ 程式碼 (只有計算，沒有GUI)</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/23084f05dfd889d2fb1ff59f9feaba59/voronoi.7z"><span class="xref download myst">完整程式碼 (7z壓縮檔)</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/f5dd3dfd30c7c120450584c89ffb54eb/input.txt"><span class="xref download myst">測試輸入檔 (20筆測資，含註解)</span></a></p></li>
+<li><p><a class="reference download internal" download="" href="_downloads/dfefd392d09037d4e242692129e4c863/output.txt"><span class="xref download myst">測試輸出檔</span></a></p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>相關連結<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://web.ntnu.edu.tw/~algo/Neighbor.html">Voronoi diagram-演算法筆記</a></p></li>
+<li><p><a class="reference external" href="https://par.cse.nsysu.edu.tw/~cbyang/course/algo/algonote/algo4.ppt">Chap 4. The
+Divide-and-Conquer Strategy</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="markdown-notebooks.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Notebooks with MyST Markdown</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">軟體規格書</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">軟體說明</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">程式設計</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">軟體測試與實驗結果</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">結論與心得</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">附錄</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">相關檔案</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">相關連結</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
