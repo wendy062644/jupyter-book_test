@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
@@ -27,5 +30,11 @@ jobs:
           jupyter-book build .
 
       - name: Deploy to GitHub Pages
+        env:
+          GIT_USER_NAME: github-actions
+          GIT_USER_EMAIL: github-actions@github.com
         run: |
-          ghp-import -n -p -f _build/html
+          git config --global user.name "${GIT_USER_NAME}"
+          git config --global user.email "${GIT_USER_EMAIL}"
+          ghp-import -n -f _build/html -b gh-pages
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages --force
