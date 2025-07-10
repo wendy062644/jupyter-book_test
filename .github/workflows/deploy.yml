@@ -2,18 +2,17 @@ name: deploy-book
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
-  contents: write
+  contents: write  # 🟢 必須要這行，否則 GitHub Token 沒有寫入權限
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -25,16 +24,13 @@ jobs:
         run: |
           pip install -U jupyter-book ghp-import
 
-      - name: Build the book
+      - name: Build Jupyter Book
         run: |
           jupyter-book build .
 
       - name: Deploy to GitHub Pages
-        env:
-          GIT_USER_NAME: github-actions
-          GIT_USER_EMAIL: github-actions@github.com
         run: |
-          git config --global user.name "${GIT_USER_NAME}"
-          git config --global user.email "${GIT_USER_EMAIL}"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           ghp-import -n -f _build/html -b gh-pages
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} gh-pages --force
+          git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" gh-pages --force
